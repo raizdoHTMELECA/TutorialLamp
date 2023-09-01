@@ -1,0 +1,53 @@
+ apt install apache2
+
+systemctl start apache2
+
+apt install php php-xml php-mysql php-mbstring php-zip php-soap php-sqlite3 php-curl php-gd php-ldap php-imap php-common
+
+apt install mysql-server
+
+mysql -u root -p
+
+create database joomla;
+
+use joomla;
+
+create user 'user'@localhost identified by '123456';
+
+grant all privileges on joomla.* to 'user'@localhost;
+
+flush privileges;
+ 
+exit;
+ 
+cd /var/www/
+ 
+mkdir joomla
+ 
+cd joomla
+
+wget https://downloads.joomla.org/cms/joomla3/3-9-4/Joomla_3-9-4-Stable-Full_Package.zip?format=zip
+
+unzip Joomla_3-9-4-Stable-Full_Package.zip\?format\=zip
+
+chown -R www-data. ./
+
+chmod -R 755 ./
+
+xxxxxx nano /etc/apache2/sites-available/joomla.conf xxxxxxxxx
+ 
+<virtualhost *:80>
+
+servername www.testes.com
+
+documentroot /var/www/joomla
+
+xxxxxxxxxxx </virtualhost> xxxxxxxxxxxxxxx
+
+a2dissite 000-default.conf
+
+a2ensite joomla.conf
+
+systemctl reload apache2
+
+a2enmod rewrite
