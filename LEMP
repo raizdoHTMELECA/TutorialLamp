@@ -1,0 +1,166 @@
+
+Things to do after install Ubuntu 20
+sudo apt update -y
+sudo apt-get upgrade -y
+sudo apt install build-essential checkinstall
+sudo apt install ubuntu-restricted-extras
+sudo apt install software-properties-common
+sudo apt upgrade -o APT::Get::Show-Upgraded=true
+sudo apt install apt-show-versions
+sudo apt update -y
+sudo apt-get upgrade -y
+sudo apt update && sudo apt-get upgrade --fix-missing
+sudo apt install build-essential checkinstall
+sudo apt install ubuntu-restricted-extras
+sudo apt update
+sudo -i
+add-apt-repository ppa:git-core/ppa
+apt update -y
+apt install git
+git config --global user.name "masum"
+git config --global user.email mail@domain.com
+apt upgrade -y
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+cat /root/.ssh/id_rsa.pub
+service ssh restart
+apt -f install
+apt autoremove
+apt -y autoclean
+apt -y clean
+apt update -y
+apt-get upgrade -y
+reboot
+
+Install NGINX
+apt update
+apt install nginx
+chown -R $USER:$USER /var/www/html
+chmod -R 755 /var/www/html
+nginx -t
+ufw app list
+ufw allow 'Nginx HTTP'
+ufw status
+systemctl start nginx
+systemctl enable nginx
+systemctl daemon-reload
+systemctl restart nginx
+systemctl reload nginx
+systemctl status nginx
+apt install curl
+curl -4 icanhazip.com
+
+#Install MariaDB
+apt install mariadb-server mariadb-client
+mysql_secure_installation
+nano /usr/lib/systemd/system/mariadb.service
+
+Update
+LimitNOFILE=infinity
+
+save and exit ctrl+s and ctrl+x
+systemctl daemon-reload
+systemctl restart mariadb
+systemctl status mariadb
+ctrl+c
+systemctl is-enabled mariadb
+mysql
+create database joomla;
+CREATE USER 'netadmin'@'localhost' IDENTIFIED BY 'JoomL@786';
+GRANT ALL PRIVILEGES ON . TO 'netadmin'@'localhost';
+use joomla;
+FLUSH PRIVILEGES;
+exit
+systemctl restart mysql
+apt update -y
+apt upgrade -y
+apt install php php-mysql php-fpm
+sudo apt install openssl php-common php-curl php-json php-mbstring php-mysql php-xml php-zip
+sudo apt install php7.4-common php7.4-bcmath openssl php7.4-json php7.4-mbstring
+systemctl status php7.4-fpm
+systemctl is-enabled php7.4-fpm
+nano /etc/php/7.4/fpm/pool.d/www.conf
+
+add this below line if its all ready exist do not change anything
+listen = /run/php/php7.4-fpm.sock
+
+save and exit ctrl+s and ctrl+x
+nano /etc/nginx/sites-available/default
+
+Remove/Comment all text and replace below texts
+$$$$$$$$$$$$$$$$$$faltaserver {
+listen 80 default_server;
+listen [::]:80 default_server;
+root /var/www/html;
+
+    # Add index.php to the list if you are using PHP
+    index index.php index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+            # First attempt to serve request as file, then
+            # as directory, then fall back to displaying a 404.
+            try_files $uri $uri/ =404;
+    }
+
+    # pass PHP scripts to FastCGI server
+    #
+    location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+    #
+    #       # With php-fpm (or other unix sockets):
+            fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+    #       # With php-cgi (or other tcp sockets):
+    #       fastcgi_pass 127.0.0.1:9000;
+    }
+}
+
+save and exit ctrl+s and ctrl+x
+nginx -t
+
+apt install phpmyadmin
+ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+chmod 775 -R /usr/share/phpmyadmin/
+chown root:www-data -R /usr/share/phpmyadmin/
+
+systemctl stop apache2
+systemctl restart nginx
+systemctl reload nginx
+systemctl status nginx
+
+visit: localhost/phpmyadmin
+User: netadmin
+Pass: JoomL@786
+
+Install Joomla
+cd /var/www/html/
+mkdir joomla
+cd joomla
+wget https://downloads.joomla.org/cms/joomla4/4-0-3/Joomla_4-0-3-Stable-Full_Package.zip
+apt install unzip
+unzip Joomla_4-0-3-Stable-Full_Package.zip
+chown -R www-data:www-data /var/www/html/joomla
+chmod -R 755 /var/www/html/joomla
+nano /etc/apache2/sites-available/000-default.conf
+
+<VirtualHost *:80>
+DirectoryIndex index.php
+DocumentRoot /var/www/html/joomla
+
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+<Directory "/var/www/html/joomla">
+DirectoryIndex index.php index.html.var index.php
+Options FollowSymlinks
+Allowoverride All
+Require all granted
+
+save and exit
+systemctl stop apache2
+nginx -t
+systemctl reload nginx
+systemctl restart nginx
+
